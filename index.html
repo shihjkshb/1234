@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>超绝曼巴</title>
+    <title>what can I say</title>
     <style>
         * {
             box-sizing: border-box;
@@ -225,7 +225,7 @@
     </style>
 </head>
 <body>
-    <h1>超绝曼巴</h1>
+    <h1>man</h1>
     <p class="subtitle"></p>
     
     <div class="container">
@@ -238,7 +238,7 @@
         
         <div class="mode-controls">
             <button class="btn mode-btn" id="mode3s">3秒/间隔模式</button>
-            <button class="btn mode-btn" id="mode1.5s">1.5秒/间隔模式</button>
+            <button class="btn mode-btn" id="mode1_5s">1.5秒/间隔模式</button>
         </div>
         
         <div class="button-group add-group">
@@ -270,7 +270,7 @@
         const progressText = document.getElementById('progressText');
         const statusElement = document.getElementById('status');
         const mode3sBtn = document.getElementById('mode3s');
-        const mode1_5sBtn = document.getElementById('mode1.5s');
+        const mode1_5sBtn = document.getElementById('mode1_5s');
         const resetBtn = document.getElementById('resetBtn');
         const addButtonsContainer = document.getElementById('addButtons');
         const subtractButtonsContainer = document.getElementById('subtractButtons');
@@ -279,7 +279,7 @@
         let progress = 0;
         let intervalId = null;
         let currentMode = null;
-        let lastActiveMode = null; // 新增：记录上一次的自动模式
+        let lastActiveMode = null;
         
         // 创建进度段
         function createProgressSegments() {
@@ -293,7 +293,6 @@
         
         // 更新进度显示
         function updateProgress() {
-            const segments = Math.floor(progress / 10);
             progressBar.style.width = `${progress}%`;
             progressText.textContent = `${progress}%`;
             
@@ -331,18 +330,9 @@
             progress = Math.max(progress - decrement * 10, 0);
             updateProgress();
             
-            // 修复：如果进度从100%减少，并且之前有自动模式，则恢复自动模式
+            // 修复：只要存在上一次的自动模式，并且当前没有自动模式在运行，就恢复自动模式
             if (progress < 100 && lastActiveMode && !intervalId) {
                 startAutoMode(lastActiveMode.intervalTime, lastActiveMode.modeName);
-            }
-            
-            // 如果进度减少，停止自动模式
-            if (intervalId) {
-                clearInterval(intervalId);
-                intervalId = null;
-                currentMode = null;
-                mode3sBtn.classList.remove('active');
-                mode1_5sBtn.classList.remove('active');
             }
         }
         
@@ -371,7 +361,8 @@
                 }, intervalTime);
                 
                 currentMode = modeName;
-                document.getElementById(`mode${modeName.replace('.', '_')}s`).classList.add('active');
+                const modeBtnId = modeName === '1.5' ? 'mode1_5s' : 'mode3s';
+                document.getElementById(modeBtnId).classList.add('active');
             }
         }
         
@@ -401,6 +392,28 @@
             }
         }
         
+        // 重置进度条
+        function resetProgress() {
+            // 停止自动模式
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            
+            // 重置状态
+            progress = 0;
+            currentMode = null;
+            lastActiveMode = null;
+            mode3sBtn.classList.remove('active');
+            mode1_5sBtn.classList.remove('active');
+            
+            // 重新创建进度段
+            createProgressSegments();
+            
+            // 更新UI
+            updateProgress();
+        }
+        
         // 初始化
         function init() {
             createProgressSegments();
@@ -416,23 +429,7 @@
                 startAutoMode(1500, '1.5');
             });
             
-            resetBtn.addEventListener('click', () => {
-                // 停止自动模式
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                }
-                
-                // 重置状态
-                progress = 0;
-                currentMode = null;
-                lastActiveMode = null;
-                mode3sBtn.classList.remove('active');
-                mode1_5sBtn.classList.remove('active');
-                
-                // 更新UI
-                updateProgress();
-            });
+            resetBtn.addEventListener('click', resetProgress);
         }
         
         // 页面加载完成后初始化
@@ -440,3 +437,4 @@
     </script>
 </body>
 </html>
+
