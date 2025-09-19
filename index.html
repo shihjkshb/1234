@@ -225,7 +225,7 @@
     </style>
 </head>
 <body>
-    <h1>114514</h1>
+    <h1>超绝曼巴</h1>
     <p class="subtitle"></p>
     
     <div class="container">
@@ -242,14 +242,14 @@
         </div>
         
         <div class="button-group add-group">
-            <h3></h3>
+            <h3>增加进度</h3>
             <div class="controls" id="addButtons">
                 <!-- +1 到 +5 按钮将通过JS动态添加 -->
             </div>
         </div>
         
         <div class="button-group subtract-group">
-            <h3></h3>
+            <h3>减少进度</h3>
             <div class="controls" id="subtractButtons">
                 <!-- -1 到 -10 按钮将通过JS动态添加 -->
             </div>
@@ -279,6 +279,7 @@
         let progress = 0;
         let intervalId = null;
         let currentMode = null;
+        let lastActiveMode = null; // 新增：记录上一次的自动模式
         
         // 创建进度段
         function createProgressSegments() {
@@ -330,6 +331,11 @@
             progress = Math.max(progress - decrement * 10, 0);
             updateProgress();
             
+            // 修复：如果进度从100%减少，并且之前有自动模式，则恢复自动模式
+            if (progress < 100 && lastActiveMode && !intervalId) {
+                startAutoMode(lastActiveMode.intervalTime, lastActiveMode.modeName);
+            }
+            
             // 如果进度减少，停止自动模式
             if (intervalId) {
                 clearInterval(intervalId);
@@ -351,6 +357,12 @@
             // 重置按钮状态
             mode3sBtn.classList.remove('active');
             mode1_5sBtn.classList.remove('active');
+            
+            // 记录上一次的自动模式
+            lastActiveMode = {
+                intervalTime: intervalTime,
+                modeName: modeName
+            };
             
             // 启动新模式
             if (progress < 100) {
@@ -414,6 +426,7 @@
                 // 重置状态
                 progress = 0;
                 currentMode = null;
+                lastActiveMode = null;
                 mode3sBtn.classList.remove('active');
                 mode1_5sBtn.classList.remove('active');
                 
