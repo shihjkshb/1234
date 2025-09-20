@@ -28,7 +28,7 @@
             background: rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(188, 143, 193, 0.3);
+            box-shadow: 极0 10px 30px rgba(188, 143, 193, 0.3);
             margin-top: 20px;
             backdrop-filter: blur(5px);
         }
@@ -43,7 +43,7 @@
         
         .subtitle {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 30极px;
             color: #8a6bb3;
             font-weight: 500;
         }
@@ -88,7 +88,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 30px;
         }
         
@@ -100,11 +100,11 @@
         }
         
         .btn {
-            padding: 12px 25px;
+            padding: 12px 20px;
             border: none;
             border-radius: 50px;
             font-size: 1.1rem;
-            font-weight: bold;
+            font极-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 8px rgba(188, 143, 193, 0.3);
@@ -133,13 +133,15 @@
         .add-btn {
             background: linear-gradient(135deg, #a6f0c6, #72ddf7);
             color: #5a4b81;
-            min-width: 80px;
+            flex: 1;
+            min-width: 60px;
         }
         
         .subtract-btn {
             background: linear-gradient(135deg, #ff9aef, #f8c8dc);
             color: #5a4b81;
-            min-width: 80px;
+            flex: 1;
+            min-width: 60px;
         }
         
         .button-group {
@@ -211,22 +213,51 @@
             .mode-controls {
                 flex-direction: column;
                 align-items: center;
+                gap: 10px;
             }
             
             .btn {
-                padding: 10px 20px;
-                font-size: 1rem;
+                padding: 10px 12px;
+                font-size: 0.9rem;
             }
             
             .mode-btn {
                 min-width: 160px;
+                width: 100%;
+            }
+            
+            .controls {
+                gap: 6px;
+            }
+            
+            .add-btn, .subtract-btn {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+                min-width: 44px;
+            }
+            
+            .button-group {
+                padding: 12px;
+            }
+            
+            /* 移动端特定样式 - 按钮换行 */
+            .subtract-group .controls {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+            
+            .add-group .controls {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>man</h1>
-    <p class="subtitle"></p>
+    <h1>what can I say</h1>
+    <p class="subtitle">man</p>
     
     <div class="container">
         <div class="progress-container">
@@ -241,17 +272,19 @@
             <button class="btn mode-btn" id="mode1_5s">1.5秒/间隔模式</button>
         </div>
         
-        <div class="button-group add-group">
-            <h3></h3>
-            <div class="controls" id="addButtons">
-                <!-- +1 到 +5 按钮将通过JS动态添加 -->
-            </div>
-        </div>
-        
+        <!-- 减少按钮组放在上面 -->
         <div class="button-group subtract-group">
             <h3></h3>
             <div class="controls" id="subtractButtons">
                 <!-- -1 到 -10 按钮将通过JS动态添加 -->
+            </div>
+        </div>
+        
+        <!-- 增加按钮组放在下面 -->
+        <div class="button-group add-group">
+            <h3></h3>
+            <div class="controls" id="addButtons">
+                <!-- +1 到 +5 按钮将通过JS动态添加 -->
             </div>
         </div>
         
@@ -260,7 +293,7 @@
         </div>
         
         <div style="text-align: center;">
-            <button class="btn reset-btn" id="resetBtn">重置进度条</button>
+            <button class="btn reset-btn极" id="resetBtn">重置进度条</button>
         </div>
     </div>
 
@@ -380,13 +413,12 @@
             }
             
             // 创建 -1 到 -10 按钮
-            const subtractValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            for (const value of subtractValues) {
+            for (let i = 1; i <= 10; i++) {
                 const button = document.createElement('button');
                 button.className = 'btn subtract-btn';
-                button.textContent = `-${value}`;
+                button.textContent = `-${i}`;
                 button.addEventListener('click', () => {
-                    subtractProgress(value);
+                    subtractProgress(i);
                 });
                 subtractButtonsContainer.appendChild(button);
             }
@@ -437,4 +469,3 @@
     </script>
 </body>
 </html>
-
